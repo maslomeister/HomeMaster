@@ -51,8 +51,6 @@ export const GeneralSettings: VFC<Props> = ({ backend }: Props) => {
 
     mStrNameValues.push({ data: "", label: "Recent Games" });
 
-    console.log("collections memo", mStrNameValues);
-
     return mStrNameValues;
   }, []);
 

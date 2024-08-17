@@ -1,29 +1,17 @@
 import {
   afterPatch,
-  callOriginal,
   findInReactTree,
-  replacePatch,
   RoutePatch,
-  ServerAPI,
-  wrapReactClass,
   wrapReactType,
 } from "decky-frontend-lib";
 import { ReactElement } from "react";
 import { Backend } from "../app/backend";
-import { HomeMasterSettings } from "../app/settings";
-import { after } from "lodash";
 
-/**
- * Patches the Steam library to allow the plugin to change the tabs.
- * @param serverAPI The plugin's serverAPI.
- * @returns A routepatch for the library.
- */
 export const patchHome = (backend: Backend): RoutePatch => {
   //* This only runs 1 time, which is perfect
   return backend.serverAPI.routerHook.addPatch(
     "/library/home",
     (props: { path: string; children: ReactElement }) => {
-      console.log("ret0", props.children);
       afterPatch(
         props.children,
         "type",
@@ -34,8 +22,6 @@ export const patchHome = (backend: Backend): RoutePatch => {
             ret.type,
             "type",
             (_: Record<string, unknown>[], ret2?: any) => {
-              let cache3: any = null;
-
               const recents = findInReactTree(
                 ret2,
                 (x) =>
@@ -48,10 +34,13 @@ export const patchHome = (backend: Backend): RoutePatch => {
                 recents.type,
                 "type",
                 (_: Record<string, unknown>[], ret3?: any) => {
-                  if (cache3) {
-                    ret3 = cache3;
+                  if (backend.GetCache()) {
+                    console.log("CACHED, returning early");
+                    ret3 = backend.GetCache();
                     return ret3;
                   }
+
+                  console.log(" NOT CACHED, DOING FULL RUN");
 
                   const p = findInReactTree(
                     ret3,
@@ -67,7 +56,7 @@ export const patchHome = (backend: Backend): RoutePatch => {
                     p,
                     "type",
                     (_: Record<string, unknown>[], ret4?: any) => {
-                      cache3 = ret3;
+                      backend.SetCache(ret3);
                       return ret4;
                     }
                   );
