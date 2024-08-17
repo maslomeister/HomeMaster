@@ -1,5 +1,13 @@
 # Home Master
 
+
+
+<p float="left">
+<img src="https://github.com/maslomeister/HomeMaster/blob/main/assets/thumbnail.jpg?raw=true" width="600" />
+<img src="https://github.com/maslomeister/HomeMaster/blob/main/assets/thumbnail2.jpg?raw=true" width="300" />
+</p>
+
+
 A plugin for customizing the home page on the Steam Deck.
 
 <!-- ![Main View](./assets/thumbnail.png) -->
