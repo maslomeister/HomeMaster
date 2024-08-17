@@ -6,27 +6,27 @@ export class Backend {
   public settings: Settings;
   public currentSettings: HomeMasterSettings = DEFAULTS;
   private games: Number[];
+  private cache: any = null;
 
   constructor(serverAPI: ServerAPI, settings: Settings) {
     this.serverAPI = serverAPI;
     this.settings = settings;
-    this.games = Array.from(collectionStore.recentAppsCollection.apps.keys());
+    this.games = collectionStore.recentAppCollections[0].allApps
+      .filter((app) => app.app_type === 1)
+      .map((app) => app.appid)
+      .slice(0, 20);
   }
 
   public LoadSettings(newSettings: HomeMasterSettings) {
+    this.SetCache(null);
+
     const previousCollectionId =
       this.currentSettings.collectionData.collectionId;
 
-    if (previousCollectionId != newSettings.collectionData.collectionId) {
-      this.currentSettings = newSettings;
+    this.currentSettings = newSettings;
 
-      if (newSettings.collectionData.collectionId === "") {
-        this.games = Array.from(
-          collectionStore.recentAppsCollection.apps.keys()
-        );
-      } else {
-        this.LoadGamesFromCollection();
-      }
+    if (previousCollectionId != newSettings.collectionData.collectionId) {
+      this.LoadGamesFromCollection();
     }
   }
 
@@ -66,5 +66,13 @@ export class Backend {
     } else {
       return this.currentSettings.collectionData.collectionName;
     }
+  }
+
+  public SetCache(cache: any) {
+    this.cache = cache;
+  }
+
+  public GetCache() {
+    return this.cache;
   }
 }
