@@ -1,11 +1,4 @@
-import {
-  ButtonItem,
-  definePlugin,
-  PanelSection,
-  PanelSectionRow,
-  RoutePatch,
-  ServerAPI,
-} from "decky-frontend-lib";
+import { definePlugin, RoutePatch, ServerAPI } from "decky-frontend-lib";
 
 import { TbLayoutNavbarExpand } from "react-icons/tb";
 
@@ -13,8 +6,7 @@ import { Settings } from "./app/settings";
 import { LocatorProvider } from "./components/locator";
 import { Backend } from "./app/backend";
 import { patchHome } from "./patches/HomePatch";
-import { SettingsPage } from "./pages/settings";
-import { navigateToPage, SETTINGS_ROUTE } from "./pages/navigation";
+import { Main } from "./pages/main";
 
 declare global {
   var SteamClient: SteamClient;
@@ -33,27 +25,12 @@ export default definePlugin((serverAPI: ServerAPI) => {
 
   homePatch = patchHome(backend);
 
-  serverAPI.routerHook.addRoute(SETTINGS_ROUTE, () => (
-    <LocatorProvider settings={settings}>
-      <SettingsPage backend={backend} />
-    </LocatorProvider>
-  ));
-
   return {
     title: <>HomeMaster</>,
     content: (
-      <PanelSection>
-        <PanelSectionRow>
-          <ButtonItem
-            layout="below"
-            onClick={() => {
-              navigateToPage(SETTINGS_ROUTE);
-            }}
-          >
-            SETTINGS
-          </ButtonItem>
-        </PanelSectionRow>
-      </PanelSection>
+      <LocatorProvider settings={settings}>
+        <Main backend={backend} />
+      </LocatorProvider>
     ),
     icon: <TbLayoutNavbarExpand />,
     onDismount: () => {
