@@ -4,7 +4,6 @@ import { SteamController } from "./SteamController";
 import { LogController } from "./LogController";
 import { getCurrentUserId } from "../Utils";
 
-
 /**
  * Main controller class for the plugin.
  */
@@ -32,17 +31,22 @@ export class PluginController {
    * @returns The unregister function for the login hook.
    */
   static initOnLogin(onMount: () => Promise<void>): Unregisterer {
-    return this.steamController.registerForAuthStateChange(async (username) => {
-      LogController.log(`User logged in. [DEBUG] username: ${username}.`);
-      if (await this.steamController.waitForServicesToInitialize()) {
-        await PluginController.init();
-        onMount();
-      } else {
-        PythonInterop.toast("Error", "Failed to initialize, try restarting.");
-      }
-    }, async (username) => {
-      LogController.log(`User logged out. [DEBUG] username: ${username}.`);
-    }, true, true);
+    return this.steamController.registerForAuthStateChange(
+      async (username) => {
+        LogController.log(`User logged in. [DEBUG] username: ${username}.`);
+        if (await this.steamController.waitForServicesToInitialize()) {
+          await PluginController.init();
+          onMount();
+        } else {
+          PythonInterop.toast("Error", "Failed to initialize, try restarting.");
+        }
+      },
+      async (username) => {
+        LogController.log(`User logged out. [DEBUG] username: ${username}.`);
+      },
+      true,
+      true
+    );
   }
 
   /**
@@ -51,7 +55,9 @@ export class PluginController {
   static async init(): Promise<void> {
     LogController.log("PluginController initialized.");
 
-    this.onWakeSub = this.steamController.registerForOnResumeFromSuspend(this.onWakeFromSleep.bind(this));
+    this.onWakeSub = this.steamController.registerForOnResumeFromSuspend(
+      this.onWakeFromSleep.bind(this)
+    );
   }
 
   /**

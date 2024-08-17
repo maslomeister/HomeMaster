@@ -1,5 +1,4 @@
-import { sleep } from 'decky-frontend-lib';
-import { GamepadUIAudio, SFXPath } from './GamepadUIAudio';
+import { sleep } from "decky-frontend-lib";
 
 /**
  * Waits for a condition to be true.
@@ -8,7 +7,11 @@ import { GamepadUIAudio, SFXPath } from './GamepadUIAudio';
  * @param check The condition to check.
  * @returns A promise resolving to true if the check was true on any attempt, or false if it failed each time.
  */
-export async function waitForCondition(retries: number, delay: number, check: () => (boolean | Promise<boolean>)): Promise<boolean> {
+export async function waitForCondition(
+  retries: number,
+  delay: number,
+  check: () => boolean | Promise<boolean>
+): Promise<boolean> {
   const waitImpl = async (): Promise<boolean> => {
     try {
       let tries = retries + 1;
@@ -38,7 +41,7 @@ export async function waitForCondition(retries: number, delay: number, check: ()
  * @returns The user's id as a bigint.
  */
 export function getSteamIdFromParts(low: number, high: number): bigint {
-  return (BigInt(high) << 32n) | (BigInt(low));
+  return (BigInt(high) << 32n) | BigInt(low);
 }
 
 /**
@@ -66,7 +69,10 @@ export function capitalizeFirstLetter(word: string): string {
  * @returns The capitalized string of words.
  */
 export function capitalizeEachWord(words: string): string {
-  return words.split(" ").map((word: string) => capitalizeFirstLetter(word)).join(" ");
+  return words
+    .split(" ")
+    .map((word: string) => capitalizeFirstLetter(word))
+    .join(" ");
 }
 
 /**
@@ -76,28 +82,29 @@ export function capitalizeEachWord(words: string): string {
  */
 export function getCurrentUserId(useU64 = false): string {
   if (useU64) return window.App.m_CurrentUser.strSteamID;
-  return BigInt.asUintN(32, BigInt(window.App.m_CurrentUser.strSteamID)).toString();
-};
+  return BigInt.asUintN(
+    32,
+    BigInt(window.App.m_CurrentUser.strSteamID)
+  ).toString();
+}
 
-export function debounce(func:Function, wait:number, immediate?:boolean) {
-  let timeout:NodeJS.Timeout|null;
-  return function (this:any) {
-      const context = this, args = arguments;
-      const later = function () {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-      };
-      const callNow = immediate && !timeout;
-      clearTimeout(timeout as NodeJS.Timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
+export function debounce(func: Function, wait: number, immediate?: boolean) {
+  let timeout: NodeJS.Timeout | null;
+  return function (this: any) {
+    const context = this,
+      args = arguments;
+    const later = function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout as NodeJS.Timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
   };
 }
 
 /**
  * Plays audio url while respecting whether user has ui sounds enabled/ disabled
- *  @param path Audio url 
+ *  @param path Audio url
  */
-export function playUISound(path: SFXPath) {
-  if (settingsStore?.m_ClientSettings?.enable_ui_sounds) GamepadUIAudio.AudioPlaybackManager.PlayAudioURL(path);
-}

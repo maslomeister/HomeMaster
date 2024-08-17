@@ -1,63 +1,63 @@
 import {
+  ButtonItem,
   definePlugin,
+  PanelSection,
+  PanelSectionRow,
   RoutePatch,
   ServerAPI,
 } from "decky-frontend-lib";
 
 import { TbLayoutNavbarExpand } from "react-icons/tb";
 
-import { PluginController } from "./lib/controllers/PluginController";
-import { PythonInterop } from "./lib/controllers/PythonInterop";
-
-import { HomeMasterContextProvider } from "./state/HomeMasterContext";
-import { HomeMasterManager } from "./state/HomeMasterManager";
-
+import { Settings } from "./app/settings";
+import { LocatorProvider } from "./components/locator";
+import { Backend } from "./app/backend";
 import { patchHome } from "./patches/HomePatch";
-
-import { QuickAccessContent } from "./components/QuickAccessContent";
-import { Fragment } from 'react';
+import { SettingsPage } from "./pages/settings";
+import { navigateToPage, SETTINGS_ROUTE } from "./pages/navigation";
 
 declare global {
-  let DeckyPluginLoader: { pluginReloadQueue: { name: string; version?: string; }[]; };
   var SteamClient: SteamClient;
   let collectionStore: CollectionStore;
   let appStore: AppStore;
   let loginStore: LoginStore;
   let friendStore: FriendStore;
-  //* This casing is correct, idk why it doesn't match the others.
   let securitystore: SecurityStore;
   let settingsStore: SettingsStore;
 }
 
-
 export default definePlugin((serverAPI: ServerAPI) => {
   let homePatch: RoutePatch;
+  const settings = new Settings();
+  const backend = new Backend(serverAPI, settings);
 
-  PythonInterop.setServer(serverAPI);
+  homePatch = patchHome(backend);
 
-  const homeMasterManager = new HomeMasterManager();
-  PluginController.setup(serverAPI);
-
-  const loginUnregisterer = PluginController.initOnLogin(async () => {
-    await homeMasterManager.loadSettings();
-    homePatch = patchHome(serverAPI, homeMasterManager);
-  });
+  serverAPI.routerHook.addRoute(SETTINGS_ROUTE, () => (
+    <LocatorProvider settings={settings}>
+      <SettingsPage backend={backend} />
+    </LocatorProvider>
+  ));
 
   return {
     title: <>HomeMaster</>,
-    // titleView: <QuickAccessTitleView title="HomeMaster" homeMasterManager={homeMasterManager} />,
-    content:
-      <HomeMasterContextProvider homeMasterManager={homeMasterManager}>
-        <QuickAccessContent />
-      </HomeMasterContextProvider>,
+    content: (
+      <PanelSection>
+        <PanelSectionRow>
+          <ButtonItem
+            layout="below"
+            onClick={() => {
+              navigateToPage(SETTINGS_ROUTE);
+            }}
+          >
+            SETTINGS
+          </ButtonItem>
+        </PanelSectionRow>
+      </PanelSection>
+    ),
     icon: <TbLayoutNavbarExpand />,
     onDismount: () => {
-      serverAPI.routerHook.removePatch("/", homePatch);
-      serverAPI.routerHook.removeRoute("/tab-master-docs");
-
-      loginUnregisterer.unregister();
-      PluginController.dismount();
+      serverAPI.routerHook.removePatch("/library/home", homePatch);
     },
   };
 });
-
