@@ -35,12 +35,9 @@ export const patchHome = (backend: Backend): RoutePatch => {
                 "type",
                 (_: Record<string, unknown>[], ret3?: any) => {
                   if (backend.GetCache()) {
-                    console.log("CACHED, returning early");
                     ret3 = backend.GetCache();
                     return ret3;
                   }
-
-                  console.log(" NOT CACHED, DOING FULL RUN");
 
                   const p = findInReactTree(
                     ret3,
