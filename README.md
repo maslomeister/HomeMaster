@@ -25,7 +25,7 @@ Once you have installed Home Master, open it in the Quick Access Menu (QAM) and 
 
 # Installation
 1. [Install the Decky plugin loader](https://github.com/SteamDeckHomebrew/decky-loader#installation)
-2. Use the built in plugin store to download the Home Master Plugin from (Releases)[https://github.com/maslomeister/HomeMaster/releases]
+2. Use the built in plugin store to download the Home Master Plugin from [Releases](https://github.com/maslomeister/HomeMaster/releases)
 
 
 # Contributing
@@ -39,4 +39,4 @@ If you're interested in fixing a bug, submitting a new feature, or just helping 
 
 Copyright Nikita Maslov (maslomeister)
 
-Intial idea, protype and patching method by (Tormak9970)[https://github.com/Tormak9970]
+Intial idea, protype and patching method by [Tormak9970](https://github.com/Tormak9970)
