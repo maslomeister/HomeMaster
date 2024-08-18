@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { Backend } from "../app/backend";
 import { RoutePatch, routerHook } from "@decky/api";
-import { afterPatch, findInReactTree, wrapReactType } from "@decky/ui";
+import { afterPatch, findInReactTree } from "@decky/ui";
 
 export const patchHome = (backend: Backend): RoutePatch => {
   //* This only runs 1 time, which is perfect
@@ -12,8 +12,6 @@ export const patchHome = (backend: Backend): RoutePatch => {
         props.children,
         "type",
         (_: Record<string, unknown>[], ret?: any) => {
-          wrapReactType(ret);
-
           afterPatch(
             ret.type,
             "type",
