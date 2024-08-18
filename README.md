@@ -17,10 +17,10 @@ Home Master allows you to customize the steam homepage.
 
 Features Include:<br/>
 
-- Create custom menu options
-- Hiding default and custom menu options
-- Reordering default and custom menu options
-
+- Set any steam collection as your Home page
+- Show/Hide collection name
+- Interactivaly modify your Home screen by making changes to collection inside of Library menu
+  
 # Using the plugin
 
 Once you have installed Home Master, open it in the Quick Access Menu (QAM)!
