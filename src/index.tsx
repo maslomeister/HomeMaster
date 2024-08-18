@@ -1,4 +1,9 @@
-import { definePlugin, RoutePatch, ServerAPI } from "decky-frontend-lib";
+import {
+  definePlugin,
+  findModuleChild,
+  RoutePatch,
+  ServerAPI,
+} from "decky-frontend-lib";
 
 import { TbLayoutNavbarExpand } from "react-icons/tb";
 
@@ -23,7 +28,16 @@ export default definePlugin((serverAPI: ServerAPI) => {
   const settings = new Settings();
   const backend = new Backend(serverAPI, settings);
 
-  homePatch = patchHome(backend);
+  settings.get().then((currentSetings) => {
+    backend.LoadSettings(currentSetings);
+    homePatch = patchHome(backend);
+  });
+
+  const AppOverviewChangesRegistration =
+    SteamClient.Apps.RegisterForAppOverviewChanges(function callback() {
+      backend.SetCache(null);
+      backend.LoadGamesFromCollection();
+    });
 
   return {
     title: <>HomeMaster</>,
@@ -35,6 +49,7 @@ export default definePlugin((serverAPI: ServerAPI) => {
     icon: <TbLayoutNavbarExpand />,
     onDismount: () => {
       serverAPI.routerHook.removePatch("/library/home", homePatch);
+      AppOverviewChangesRegistration.unregister();
     },
   };
 });

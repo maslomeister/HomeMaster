@@ -72,7 +72,7 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
               }}
             />
             <p style={{ padding: "0px 0px", fontSize: "12px" }}>
-              Select which collection will be used as Home Page
+              Select which collection should be used as Home Page
             </p>
           </PanelSectionRow>
           <PanelSectionRow>
@@ -86,8 +86,8 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
               />
             </Field>
             <p style={{ padding: "0px 0px", fontSize: "12px" }}>
-              After changing settings go to Library and Back to Home screen to
-              update
+              After making any changes go to Home screen and scroll around to
+              update Home page
             </p>
           </PanelSectionRow>
         </PanelSection>

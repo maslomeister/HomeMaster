@@ -1,6 +1,6 @@
 {
   "name": "homemaster",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Gives you full control over the Steam Home page!",
   "scripts": {
     "build": "shx rm -rf dist && rollup -c",
