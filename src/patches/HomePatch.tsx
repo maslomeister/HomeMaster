@@ -1,15 +1,11 @@
-import {
-  afterPatch,
-  findInReactTree,
-  RoutePatch,
-  wrapReactType,
-} from "decky-frontend-lib";
 import { ReactElement } from "react";
 import { Backend } from "../app/backend";
+import { RoutePatch, routerHook } from "@decky/api";
+import { afterPatch, findInReactTree, wrapReactType } from "@decky/ui";
 
 export const patchHome = (backend: Backend): RoutePatch => {
   //* This only runs 1 time, which is perfect
-  return backend.serverAPI.routerHook.addPatch(
+  return routerHook.addPatch(
     "/library/home",
     (props: { path: string; children: ReactElement }) => {
       afterPatch(

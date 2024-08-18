@@ -1,10 +1,3 @@
-import {
-  definePlugin,
-  findModuleChild,
-  RoutePatch,
-  ServerAPI,
-} from "decky-frontend-lib";
-
 import { TbLayoutNavbarExpand } from "react-icons/tb";
 
 import { Settings } from "./app/settings";
@@ -12,9 +5,9 @@ import { LocatorProvider } from "./components/locator";
 import { Backend } from "./app/backend";
 import { patchHome } from "./patches/HomePatch";
 import { Main } from "./pages/main";
+import { RoutePatch, definePlugin, routerHook } from "@decky/api";
 
 declare global {
-  var SteamClient: SteamClient;
   let collectionStore: CollectionStore;
   let appStore: AppStore;
   let loginStore: LoginStore;
@@ -23,10 +16,10 @@ declare global {
   let settingsStore: SettingsStore;
 }
 
-export default definePlugin((serverAPI: ServerAPI) => {
+export default definePlugin(() => {
   let homePatch: RoutePatch;
   const settings = new Settings();
-  const backend = new Backend(serverAPI, settings);
+  const backend = new Backend(settings);
 
   settings.get().then((currentSetings) => {
     backend.LoadSettings(currentSetings);
@@ -41,6 +34,7 @@ export default definePlugin((serverAPI: ServerAPI) => {
 
   return {
     title: <>HomeMaster</>,
+    name: "HomeMaster",
     content: (
       <LocatorProvider settings={settings}>
         <Main backend={backend} />
@@ -48,7 +42,7 @@ export default definePlugin((serverAPI: ServerAPI) => {
     ),
     icon: <TbLayoutNavbarExpand />,
     onDismount: () => {
-      serverAPI.routerHook.removePatch("/library/home", homePatch);
+      routerHook.removePatch("/library/home", homePatch);
       AppOverviewChangesRegistration.unregister();
     },
   };
