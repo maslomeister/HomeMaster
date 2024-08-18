@@ -33,8 +33,8 @@ export default definePlugin(() => {
     });
 
   return {
-    title: <>HomeMaster</>,
     name: "HomeMaster",
+    title: <>HomeMaster</>,
     content: (
       <LocatorProvider settings={settings}>
         <Main backend={backend} />
