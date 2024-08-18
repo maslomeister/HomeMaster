@@ -38,3 +38,5 @@ If you're interested in fixing a bug, submitting a new feature, or just helping 
  - Additionally, please provide appropriate credit for code usage
 
 Copyright Nikita Maslov (maslomeister)
+
+Intial idea, protype and patching method by (Tormak9970)[https://github.com/Tormak9970]
