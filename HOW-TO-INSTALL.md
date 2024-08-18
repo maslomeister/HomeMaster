@@ -7,12 +7,18 @@
 5. After that you'll see 2 new options appear on the left side of screen, go to **_Developer_** tab.
 
 Finally, press on **_Browse_** button and select zip file with plugin that you downloaded earlier
-![Browse button](assets/how-to-install.jpg)
-![Zip file](assets/zip_file.jpg)
+
+<img src="assets/how-to-install.jpg" width="500" />
+
+<img src="assets/zip_file.jpg" width="500" />
 
 After installation go back to Decky and you will see new plugin there
-![Decky](assets/decky.jpg)
-![Plugin Menu](assets/plugin_menu.jpg)
+
+<p float="left">
+<img src="assets/decky.jpg" width="300" />
+<img src="assets/plugin_menu.jpg" width="300" />
+
+</p>
 
 If after plugin installation, selecting collection and scrolling around in the Home page nothing doesn't seem to happen, you may need to **_Restart Steam_** from Power options.
 
