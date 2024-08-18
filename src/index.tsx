@@ -1,9 +1,4 @@
-import {
-  definePlugin,
-  findModuleChild,
-  RoutePatch,
-  ServerAPI,
-} from "decky-frontend-lib";
+import { definePlugin, RoutePatch, ServerAPI } from "decky-frontend-lib";
 
 import { TbLayoutNavbarExpand } from "react-icons/tb";
 
@@ -28,15 +23,17 @@ export default definePlugin((serverAPI: ServerAPI) => {
   const settings = new Settings();
   const backend = new Backend(serverAPI, settings);
 
-  settings.get().then((currentSetings) => {
-    backend.LoadSettings(currentSetings);
+  settings.get().then((currentSettings) => {
+    backend.LoadSettings(currentSettings);
     homePatch = patchHome(backend);
   });
 
   const AppOverviewChangesRegistration =
-    SteamClient.Apps.RegisterForAppOverviewChanges(function callback() {
-      backend.SetCache(null);
-      backend.LoadGamesFromCollection();
+    SteamClient.Apps.RegisterForAppOverviewChanges(() => {
+      if (backend.IsCollectionChanged()) {
+        backend.SetCache(null);
+        backend.LoadGamesFromCollection();
+      }
     });
 
   return {
@@ -49,7 +46,8 @@ export default definePlugin((serverAPI: ServerAPI) => {
     icon: <TbLayoutNavbarExpand />,
     onDismount: () => {
       serverAPI.routerHook.removePatch("/library/home", homePatch);
-      AppOverviewChangesRegistration.unregister();
+      // There's no unregister on RegisterForAppOverviewChanges, not sure how to properly handle this
+      // AppOverviewChangesRegistration.unregister();
     },
   };
 });

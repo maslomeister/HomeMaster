@@ -15,16 +15,41 @@ declare module "*.jpg" {
 
 type Unregisterer = {
   unregister: () => void;
-}
+};
 
 type DocPages = {
-  [key: string]: string
-}
+  [key: string]: string;
+};
 
 type UsersDict = {
   [userId: string]: {
-    tabs: TabSettingsDictionary,
-    friends: FriendEntry[],
-    friendsGames: Map<number, number[]>
+    tabs: TabSettingsDictionary;
+    friends: FriendEntry[];
+    friendsGames: Map<number, number[]>;
+  };
+};
+
+type Router = {
+  WindowStore: {
+    GamepadUIMainWindowInstance: {
+      m_history: {
+        location: {
+          pathname: string;
+        };
+      };
+    };
+  };
+};
+
+import "decky-frontend-lib"; // replace with the actual module name
+
+// Extend the WindowRouter interface within the module
+declare module "decky-frontend-lib" {
+  export interface WindowRouter {
+    m_history?: {
+      location: {
+        pathname: string;
+      };
+    }; // Add the m_history property here
   }
 }

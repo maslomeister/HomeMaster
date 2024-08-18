@@ -7,6 +7,7 @@ export class Backend {
   public currentSettings: HomeMasterSettings = DEFAULTS;
   private games: Number[];
   private cache: any = null;
+  private collectionCachedLength: Number;
 
   constructor(serverAPI: ServerAPI, settings: Settings) {
     this.serverAPI = serverAPI;
@@ -15,6 +16,8 @@ export class Backend {
       .filter((app) => app.app_type === 1)
       .map((app) => app.appid)
       .slice(0, 20);
+    this.collectionCachedLength =
+      collectionStore.recentAppCollections[0].allApps.length;
   }
 
   public LoadSettings(newSettings: HomeMasterSettings) {
@@ -48,11 +51,18 @@ export class Backend {
         })
         .map((app) => app.appid)
         .slice(0, 20);
+
+      this.collectionCachedLength = collectionStore.GetCollection(
+        this.currentSettings.collectionData.collectionId
+      ).allApps.length;
     } else {
       this.games = collectionStore.recentAppCollections[0].allApps
         .filter((app) => app.app_type === 1)
         .map((app) => app.appid)
         .slice(0, 20);
+
+      this.collectionCachedLength =
+        collectionStore.recentAppCollections[0].allApps.length;
     }
   }
 
@@ -74,5 +84,32 @@ export class Backend {
 
   public GetCache() {
     return this.cache;
+  }
+
+  public IsCollectionChanged() {
+    if (this.currentSettings.collectionData.collectionId === "") {
+      if (
+        this.collectionCachedLength !==
+        collectionStore.recentAppCollections[0].allApps.length
+      ) {
+        this.collectionCachedLength =
+          collectionStore.recentAppCollections[0].allApps.length;
+        return true;
+      }
+    }
+
+    if (
+      this.collectionCachedLength !==
+      collectionStore.GetCollection(
+        this.currentSettings.collectionData.collectionId
+      ).allApps.length
+    ) {
+      this.collectionCachedLength = collectionStore.GetCollection(
+        this.currentSettings.collectionData.collectionId
+      ).allApps.length;
+      return true;
+    }
+
+    return false;
   }
 }
