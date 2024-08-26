@@ -1,6 +1,6 @@
 // credits to https://github.com/ma3a/SDH-PlayTime
 
-import logger from "../utils";
+import { logger } from "../utils";
 
 declare global {
   // @ts-ignore

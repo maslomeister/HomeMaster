@@ -56,7 +56,7 @@ export function getColor(value: number): string {
 
 export const log = (...args: any[]) => {
   console.log(
-    `%c SpeedTest %c`,
+    `%c HomeMaster INFO %c`,
     "background: #16a085; color: black;",
     "background: #1abc9c; color: black;",
     ...args
@@ -65,7 +65,7 @@ export const log = (...args: any[]) => {
 
 export const debug = (...args: any[]) => {
   console.debug(
-    `%c SpeedTest %c`,
+    `%c HomeMaster DEBUG %c`,
     "background: #16a085; color: black;",
     "background: #1abc9c; color: black;",
     ...args
@@ -74,14 +74,14 @@ export const debug = (...args: any[]) => {
 
 export const error = (...args: any[]) => {
   console.error(
-    `%c SpeedTest %c`,
+    `%c HomeMaster ERROR %c`,
     "background: #16a085; color: black;",
     "background: #FF0000;",
     ...args
   );
 };
 
-let logger = {
+export const logger = {
   info: (...args: any[]) => {
     log(...args);
   },
@@ -94,5 +94,3 @@ let logger = {
     error(...args);
   },
 };
-
-export default logger;

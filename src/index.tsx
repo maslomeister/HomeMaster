@@ -7,6 +7,7 @@ import { LocatorProvider } from "./components/locator";
 import { Backend } from "./app/backend";
 import { patchHome } from "./patches/HomePatch";
 import { Main } from "./pages/main";
+import { logger } from "./utils";
 
 declare global {
   var SteamClient: SteamClient;
@@ -19,6 +20,8 @@ declare global {
 }
 
 export default definePlugin((serverAPI: ServerAPI) => {
+  logger.info("Intialize");
+
   let homePatch: RoutePatch;
   const settings = new Settings();
   const backend = new Backend(serverAPI, settings);
