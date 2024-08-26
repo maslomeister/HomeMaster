@@ -1,10 +1,10 @@
 {
   "name": "HomeMaster",
-  "author": "Travis Lane (Tormak)",
-  "flags": ["debug"],
+  "author": "Nikita Maslov(maslomeister), Travis Lane (Tormak)",
+  "flags": [],
   "publish": {
     "tags": ["Customization", "Home"],
-    "description": "Gives you full control over the Steam Home page!",
-    "image": "https://raw.githubusercontent.com/Tormak9970/HomeMaster/main/assets/thumbnail.png"
+    "description": "Replace your Home page with any Steam collection",
+    "image": "https://raw.githubusercontent.com/maslomeister/HomeMaster/main/assets/thumbnail.png"
   }
 }
