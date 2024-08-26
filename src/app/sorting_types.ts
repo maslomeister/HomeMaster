@@ -56,3 +56,17 @@ export function compareByPurchasedTime(
 
   return timeB - timeA;
 }
+
+export function compareByPlaytime(
+  a: SteamAppOverview,
+  b: SteamAppOverview
+): number {
+  const playtimeA = a.minutes_playtime_forever;
+  const playtimeB = b.minutes_playtime_forever;
+
+  if (playtimeA === 0 && playtimeB === 0) return 0;
+  if (playtimeA === 0) return 1;
+  if (playtimeB === 0) return -1;
+
+  return playtimeB - playtimeA;
+}

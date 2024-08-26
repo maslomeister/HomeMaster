@@ -4,6 +4,7 @@ import {
   compareByLastPlayedDate,
   compareByLastTimePlayedLocally,
   compareByName,
+  compareByPlaytime,
   compareByPurchasedTime,
   compareBySteamReleaseDate,
 } from "./sorting_types";
@@ -139,6 +140,8 @@ export class Backend {
         return compareBySteamReleaseDate;
       case "Purchase Date":
         return compareByPurchasedTime;
+      case "Hours Played":
+        return compareByPlaytime;
       default:
         return compareByLastPlayedDate;
     }

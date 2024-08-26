@@ -13,6 +13,7 @@ export const sortingTypes = [
   "Alphabetical",
   "Release Date",
   "Purchase Date",
+  "Hours Played",
 ] as const;
 
 export interface HomeMasterSettings {
