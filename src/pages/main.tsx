@@ -86,8 +86,8 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
               />
             </Field>
             <p style={{ padding: "0px 0px", fontSize: "12px" }}>
-              After making any changes go to Home screen and scroll around to
-              update Home page
+              To update Home page after making any changes either scroll around
+              at Home screen or go to Library and back to Home page
             </p>
           </PanelSectionRow>
         </PanelSection>
