@@ -8,7 +8,7 @@ import {
   PanelSection,
 } from "decky-frontend-lib";
 import { useEffect, useMemo, useState, VFC } from "react";
-import { DEFAULTS, HomeMasterSettings } from "../app/settings";
+import { DEFAULTS, HomeMasterSettings, sortingTypes } from "../app/settings";
 import { useLocator } from "../components/locator";
 import { Backend } from "../app/backend";
 
@@ -53,6 +53,16 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
     return mStrNameValues;
   }, []);
 
+  const sortingOptions = useMemo(() => {
+    const mStrNameValues: DropdownOption[] = [];
+
+    sortingTypes.forEach((item) => {
+      mStrNameValues.push({ data: item, label: item });
+    });
+
+    return mStrNameValues;
+  }, []);
+
   return (
     <div>
       {loaded && (
@@ -73,6 +83,21 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
             />
             <p style={{ padding: "0px 0px", fontSize: "12px" }}>
               Select which collection should be used as Home Page
+            </p>
+          </PanelSectionRow>
+          <PanelSectionRow>
+            <Dropdown
+              // menuLabel={"Collection As Home"}
+              rgOptions={sortingOptions}
+              selectedOption={current.sortingType ?? "Last Played Locally"}
+              strDefaultLabel={"Last Played Locally"}
+              onChange={(elem: SingleDropdownOption) => {
+                current.sortingType = elem.data;
+                updateSettings();
+              }}
+            />
+            <p style={{ padding: "0px 0px", fontSize: "12px" }}>
+              Collection sorting type in descending order
             </p>
           </PanelSectionRow>
           <PanelSectionRow>

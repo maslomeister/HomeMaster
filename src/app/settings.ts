@@ -7,6 +7,14 @@ declare global {
   let SteamClient: SteamClient;
 }
 
+export const sortingTypes = [
+  "Last Played Locally",
+  "Last Played",
+  "Alphabetical",
+  "Release Date",
+  "Purchase Date",
+] as const;
+
 export interface HomeMasterSettings {
   showPatchedHome: boolean;
   hideCollectionName: boolean;
@@ -14,6 +22,7 @@ export interface HomeMasterSettings {
     collectionId: string;
     collectionName: string;
   };
+  sortingType: (typeof sortingTypes)[number];
 }
 
 let HOME_MASTER_SETTINGS_KEY = "decky-home-master";
@@ -21,6 +30,7 @@ export let DEFAULTS: HomeMasterSettings = {
   showPatchedHome: false,
   hideCollectionName: false,
   collectionData: { collectionId: "", collectionName: "" },
+  sortingType: "Last Played Locally",
 };
 
 export class Settings {

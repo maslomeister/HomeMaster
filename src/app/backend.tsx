@@ -1,5 +1,13 @@
 import { ServerAPI } from "decky-frontend-lib";
 import { DEFAULTS, HomeMasterSettings, Settings } from "./settings";
+import {
+  compareByLastPlayedDate,
+  compareByLastTimePlayedLocally,
+  compareByName,
+  compareByPurchasedTime,
+  compareBySteamReleaseDate,
+} from "./sorting_types";
+import { logger } from "../utils";
 
 export class Backend {
   public serverAPI: ServerAPI;
@@ -14,6 +22,7 @@ export class Backend {
     this.settings = settings;
     this.games = collectionStore.recentAppCollections[0].allApps
       .filter((app) => app.app_type === 1)
+      .sort(this.getSortFunction())
       .map((app) => app.appid)
       .slice(0, 20);
     this.collectionCachedLength =
@@ -26,9 +35,14 @@ export class Backend {
     const previousCollectionId =
       this.currentSettings.collectionData.collectionId;
 
+    const previousSortingType = this.currentSettings.sortingType;
+
     this.currentSettings = newSettings;
 
-    if (previousCollectionId != newSettings.collectionData.collectionId) {
+    if (
+      previousCollectionId !== newSettings.collectionData.collectionId ||
+      previousSortingType !== newSettings.sortingType
+    ) {
       this.LoadGamesFromCollection();
     }
   }
@@ -43,12 +57,7 @@ export class Backend {
     if (this.currentSettings.collectionData.collectionId) {
       this.games = collectionStore
         .GetCollection(this.currentSettings.collectionData.collectionId)
-        .allApps.sort((a, b) => {
-          return (
-            b.rt_last_time_played_or_installed -
-            a.rt_last_time_played_or_installed
-          );
-        })
+        .allApps.sort(this.getSortFunction())
         .map((app) => app.appid)
         .slice(0, 20);
 
@@ -58,6 +67,7 @@ export class Backend {
     } else {
       this.games = collectionStore.recentAppCollections[0].allApps
         .filter((app) => app.app_type === 1)
+        .sort(this.getSortFunction())
         .map((app) => app.appid)
         .slice(0, 20);
 
@@ -111,5 +121,26 @@ export class Backend {
     }
 
     return false;
+  }
+
+  private getSortFunction(): (
+    a: SteamAppOverview,
+    b: SteamAppOverview
+  ) => number {
+    logger.info(this.currentSettings.sortingType);
+    switch (this.currentSettings.sortingType) {
+      case "Last Played":
+        return compareByLastPlayedDate;
+      case "Last Played Locally":
+        return compareByLastTimePlayedLocally;
+      case "Alphabetical":
+        return compareByName;
+      case "Release Date":
+        return compareBySteamReleaseDate;
+      case "Purchase Date":
+        return compareByPurchasedTime;
+      default:
+        return compareByLastPlayedDate;
+    }
   }
 }
