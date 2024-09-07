@@ -1,3 +1,6 @@
+import { Router, sleep } from "decky-frontend-lib";
+import { Game } from "./types/types";
+
 export function compareDateToNow(isoDateString: string): string {
   const inputDate = new Date(isoDateString);
   const currentDate = new Date();
@@ -94,3 +97,47 @@ export const logger = {
     error(...args);
   },
 };
+
+async function waitForPredicate(
+  retries: number,
+  delay: number,
+  predicate: () => boolean | Promise<boolean>
+): Promise<boolean> {
+  const waitImpl = async (): Promise<boolean> => {
+    try {
+      let tries = retries + 1;
+      while (tries-- !== 0) {
+        if (await predicate()) {
+          return true;
+        }
+        if (tries > 0) {
+          await sleep(delay);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return false;
+  };
+
+  return await waitImpl();
+}
+
+export async function awaitGameInfo(): Promise<Game> {
+  await waitForPredicate(4, 200, async () => {
+    return fetchGameInfo() != null;
+  });
+  return fetchGameInfo()!;
+}
+
+function fetchGameInfo(): Game | null {
+  if (Router.MainRunningApp != null) {
+    return {
+      id: Router.MainRunningApp.appid,
+      name: Router.MainRunningApp.display_name,
+    } as Game;
+  } else {
+    return null;
+  }
+}

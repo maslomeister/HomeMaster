@@ -41,6 +41,17 @@ type Router = {
   };
 };
 
+type Game = {
+  id: string;
+  name: string;
+};
+
+interface LifetimeNotification {
+  unAppID: number;
+  nInstanceID: string;
+  bRunning: boolean;
+}
+
 import "decky-frontend-lib"; // replace with the actual module name
 
 // Extend the WindowRouter interface within the module

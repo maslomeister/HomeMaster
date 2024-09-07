@@ -1,6 +1,6 @@
 {
   "name": "homemaster",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Replace your steam deck Home page with any Steam collection",
   "scripts": {
     "build": "shx rm -rf dist && rollup -c",

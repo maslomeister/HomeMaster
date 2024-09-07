@@ -1,4 +1,9 @@
-import { definePlugin, RoutePatch, ServerAPI } from "decky-frontend-lib";
+import {
+  definePlugin,
+  LifetimeNotification,
+  RoutePatch,
+  ServerAPI,
+} from "decky-frontend-lib";
 
 import { TbLayoutNavbarExpand } from "react-icons/tb";
 
@@ -7,7 +12,7 @@ import { LocatorProvider } from "./components/locator";
 import { Backend } from "./app/backend";
 import { patchHome } from "./patches/HomePatch";
 import { Main } from "./pages/main";
-import { logger } from "./utils";
+import { awaitGameInfo, logger } from "./utils";
 
 declare global {
   var SteamClient: SteamClient;
@@ -39,6 +44,23 @@ export default definePlugin((serverAPI: ServerAPI) => {
       }
     });
 
+  const GameStartedOrStoppedRegistration =
+    SteamClient.GameSessions.RegisterForAppLifetimeNotifications(
+      async (data: LifetimeNotification) => {
+        let game = await awaitGameInfo();
+        if (game == null || game == undefined) {
+          game = {
+            id: data.unAppID.toString(),
+            name: "",
+          };
+        }
+        if (data.bRunning || !data.bRunning) {
+          backend.SetCache(null);
+          backend.LoadGamesFromCollection();
+        }
+      }
+    );
+
   return {
     title: <>HomeMaster</>,
     content: (
@@ -51,6 +73,7 @@ export default definePlugin((serverAPI: ServerAPI) => {
       serverAPI.routerHook.removePatch("/library/home", homePatch);
       // There's no unregister on RegisterForAppOverviewChanges, not sure how to properly handle this
       // AppOverviewChangesRegistration.unregister();
+      GameStartedOrStoppedRegistration.unregister();
     },
   };
 });
