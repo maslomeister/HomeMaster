@@ -1,11 +1,20 @@
 // credits to https://github.com/ma3a/SDH-PlayTime
 
-import logger from "../utils";
+import { logger } from "../utils";
 
 declare global {
   // @ts-ignore
   let SteamClient: SteamClient;
 }
+
+export const sortingTypes = [
+  "Last Played Locally",
+  "Last Played",
+  "Alphabetical",
+  "Release Date",
+  "Purchase Date",
+  "Hours Played",
+] as const;
 
 export interface HomeMasterSettings {
   showPatchedHome: boolean;
@@ -14,6 +23,7 @@ export interface HomeMasterSettings {
     collectionId: string;
     collectionName: string;
   };
+  sortingType: (typeof sortingTypes)[number];
 }
 
 let HOME_MASTER_SETTINGS_KEY = "decky-home-master";
@@ -21,6 +31,7 @@ export let DEFAULTS: HomeMasterSettings = {
   showPatchedHome: false,
   hideCollectionName: false,
   collectionData: { collectionId: "", collectionName: "" },
+  sortingType: "Last Played Locally",
 };
 
 export class Settings {

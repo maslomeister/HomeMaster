@@ -1,5 +1,7 @@
 // Types for SteamClient.Apps
 
+import { LifetimeNotification } from "decky-frontend-lib";
+
 type Apps = {
   GetStoreTagLocalization: (tags: number[]) => Promise<TagResponse[]>;
 
@@ -239,4 +241,10 @@ type SteamGameClientData = {
   is_available_on_current_platform: boolean;
   status_percentage: number;
   installed?: boolean | undefined;
+};
+
+type GameSession = {
+  RegisterForAppLifetimeNotifications: (
+    callback: (data: LifetimeNotification) => void
+  ) => Unregisterer;
 };

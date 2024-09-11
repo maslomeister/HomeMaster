@@ -1,3 +1,6 @@
+import { Router, sleep } from "decky-frontend-lib";
+import { Game } from "./types/types";
+
 export function compareDateToNow(isoDateString: string): string {
   const inputDate = new Date(isoDateString);
   const currentDate = new Date();
@@ -56,7 +59,7 @@ export function getColor(value: number): string {
 
 export const log = (...args: any[]) => {
   console.log(
-    `%c SpeedTest %c`,
+    `%c HomeMaster INFO %c`,
     "background: #16a085; color: black;",
     "background: #1abc9c; color: black;",
     ...args
@@ -65,7 +68,7 @@ export const log = (...args: any[]) => {
 
 export const debug = (...args: any[]) => {
   console.debug(
-    `%c SpeedTest %c`,
+    `%c HomeMaster DEBUG %c`,
     "background: #16a085; color: black;",
     "background: #1abc9c; color: black;",
     ...args
@@ -74,14 +77,14 @@ export const debug = (...args: any[]) => {
 
 export const error = (...args: any[]) => {
   console.error(
-    `%c SpeedTest %c`,
+    `%c HomeMaster ERROR %c`,
     "background: #16a085; color: black;",
     "background: #FF0000;",
     ...args
   );
 };
 
-let logger = {
+export const logger = {
   info: (...args: any[]) => {
     log(...args);
   },
@@ -95,4 +98,46 @@ let logger = {
   },
 };
 
-export default logger;
+async function waitForPredicate(
+  retries: number,
+  delay: number,
+  predicate: () => boolean | Promise<boolean>
+): Promise<boolean> {
+  const waitImpl = async (): Promise<boolean> => {
+    try {
+      let tries = retries + 1;
+      while (tries-- !== 0) {
+        if (await predicate()) {
+          return true;
+        }
+        if (tries > 0) {
+          await sleep(delay);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    return false;
+  };
+
+  return await waitImpl();
+}
+
+export async function awaitGameInfo(): Promise<Game> {
+  await waitForPredicate(4, 200, async () => {
+    return fetchGameInfo() != null;
+  });
+  return fetchGameInfo()!;
+}
+
+function fetchGameInfo(): Game | null {
+  if (Router.MainRunningApp != null) {
+    return {
+      id: Router.MainRunningApp.appid,
+      name: Router.MainRunningApp.display_name,
+    } as Game;
+  } else {
+    return null;
+  }
+}

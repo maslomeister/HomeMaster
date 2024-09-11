@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, VFC } from "react";
-import { DEFAULTS, HomeMasterSettings } from "../app/settings";
+import { DEFAULTS, HomeMasterSettings, sortingTypes } from "../app/settings";
 import { useLocator } from "../components/locator";
 import { Backend } from "../app/backend";
 import {
@@ -53,6 +53,16 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
     return mStrNameValues;
   }, []);
 
+  const sortingOptions = useMemo(() => {
+    const mStrNameValues: DropdownOption[] = [];
+
+    sortingTypes.forEach((item) => {
+      mStrNameValues.push({ data: item, label: item });
+    });
+
+    return mStrNameValues;
+  }, []);
+
   return (
     <div>
       {loaded && (
@@ -76,6 +86,21 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
             </p>
           </PanelSectionRow>
           <PanelSectionRow>
+            <Dropdown
+              // menuLabel={"Collection As Home"}
+              rgOptions={sortingOptions}
+              selectedOption={current.sortingType ?? "Last Played Locally"}
+              strDefaultLabel={"Last Played Locally"}
+              onChange={(elem: SingleDropdownOption) => {
+                current.sortingType = elem.data;
+                updateSettings();
+              }}
+            />
+            <p style={{ padding: "0px 0px", fontSize: "12px" }}>
+              Collection sorting type in descending order
+            </p>
+          </PanelSectionRow>
+          <PanelSectionRow>
             <Field label="Show Collection Name">
               <Toggle
                 value={!current.hideCollectionName}
@@ -86,8 +111,8 @@ export const Main: VFC<Props> = ({ backend }: Props) => {
               />
             </Field>
             <p style={{ padding: "0px 0px", fontSize: "12px" }}>
-              After making any changes go to Home screen and scroll around to
-              update Home page
+              To update Home page after making any changes either scroll around
+              at Home screen or go to Library and back to Home page
             </p>
           </PanelSectionRow>
         </PanelSection>
