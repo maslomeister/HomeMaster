@@ -1,4 +1,4 @@
-import { Focusable, PanelSection, PanelSectionRow } from "decky-frontend-lib";
+import { Focusable, PanelSection, PanelSectionRow } from "@decky/ui";
 
 export const Tab: React.FC = ({ children }) => {
   return (
