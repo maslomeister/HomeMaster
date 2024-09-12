@@ -1,3 +1,4 @@
+import { ServerAPI } from "decky-frontend-lib";
 import { DEFAULTS, HomeMasterSettings, Settings } from "./settings";
 import {
   compareByLastPlayedDate,
@@ -10,13 +11,15 @@ import {
 import { logger } from "../utils";
 
 export class Backend {
+  public serverAPI: ServerAPI;
   public settings: Settings;
   public currentSettings: HomeMasterSettings = DEFAULTS;
   private games: Number[];
   private cache: any = null;
   private collectionCachedLength: Number;
 
-  constructor(settings: Settings) {
+  constructor(serverAPI: ServerAPI, settings: Settings) {
+    this.serverAPI = serverAPI;
     this.settings = settings;
     this.games = collectionStore.recentAppCollections[0].allApps
       .filter((app) => app.app_type === 1)

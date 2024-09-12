@@ -1,4 +1,4 @@
-import { Navigation } from "@decky/ui";
+import { Navigation } from "decky-frontend-lib";
 
 export let SETTINGS_ROUTE = "/homemaster/settings";
 

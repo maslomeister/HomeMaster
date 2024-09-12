@@ -1,16 +1,16 @@
+import {
+  Field,
+  PanelSectionRow,
+  Dropdown,
+  SingleDropdownOption,
+  DropdownOption,
+  Toggle,
+  PanelSection,
+} from "decky-frontend-lib";
 import { useEffect, useMemo, useState, VFC } from "react";
 import { DEFAULTS, HomeMasterSettings, sortingTypes } from "../app/settings";
 import { useLocator } from "../components/locator";
 import { Backend } from "../app/backend";
-import {
-  Dropdown,
-  DropdownOption,
-  Field,
-  PanelSection,
-  PanelSectionRow,
-  SingleDropdownOption,
-  Toggle,
-} from "@decky/ui";
 
 type Props = {
   backend: Backend;
