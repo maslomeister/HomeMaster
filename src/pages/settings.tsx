@@ -1,13 +1,12 @@
 import {
-  Dropdown,
-  DropdownOption,
   Field,
   PanelSectionRow,
   SidebarNavigation,
+  Dropdown,
   SingleDropdownOption,
+  DropdownOption,
   Toggle,
-} from "@decky/ui";
-
+} from "decky-frontend-lib";
 import { useEffect, useMemo, useState, VFC } from "react";
 import { DEFAULTS, HomeMasterSettings } from "../app/settings";
 import { useLocator } from "../components/locator";

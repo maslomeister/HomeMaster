@@ -4,6 +4,7 @@ import {
   RoutePatch,
   ServerAPI,
 } from "decky-frontend-lib";
+
 import { TbLayoutNavbarExpand } from "react-icons/tb";
 
 import { Settings } from "./app/settings";
@@ -11,10 +12,10 @@ import { LocatorProvider } from "./components/locator";
 import { Backend } from "./app/backend";
 import { patchHome } from "./patches/HomePatch";
 import { Main } from "./pages/main";
-import { RoutePatch, definePlugin, routerHook } from "@decky/api";
 import { awaitGameInfo, logger } from "./utils";
 
 declare global {
+  var SteamClient: SteamClient;
   let collectionStore: CollectionStore;
   let appStore: AppStore;
   let loginStore: LoginStore;
@@ -23,11 +24,12 @@ declare global {
   let settingsStore: SettingsStore;
 }
 
+export default definePlugin((serverAPI: ServerAPI) => {
+  logger.info("Intialize");
 
-export default definePlugin(() => {
   let homePatch: RoutePatch;
   const settings = new Settings();
-  const backend = new Backend(settings);
+  const backend = new Backend(serverAPI, settings);
 
   settings.get().then((currentSettings) => {
     backend.LoadSettings(currentSettings);
@@ -60,7 +62,6 @@ export default definePlugin(() => {
     );
 
   return {
-    name: "HomeMaster",
     title: <>HomeMaster</>,
     content: (
       <LocatorProvider settings={settings}>
@@ -69,8 +70,6 @@ export default definePlugin(() => {
     ),
     icon: <TbLayoutNavbarExpand />,
     onDismount: () => {
-      routerHook.removePatch("/library/home", homePatch);
-      AppOverviewChangesRegistration.unregister();
       serverAPI.routerHook.removePatch("/library/home", homePatch);
       // There's no unregister on RegisterForAppOverviewChanges, not sure how to properly handle this
       // AppOverviewChangesRegistration.unregister();
