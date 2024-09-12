@@ -1,3 +1,7 @@
+# Reasoning behind archiving
+
+This plugin is insanely simple in its core, but the underlying patching of home screen is kind of complex, constantly breaks, combine it with steam client updates and decky updates and this plugin is a nightmare to maintain for a result that barely noticeable. I don't have enough time nor do i care this much about the home screen of my deck to continue to maintain this plugin. Feel free to clone it and fix it if you would like to continue using it.
+
 # Home Master
 
 <p float="left">
