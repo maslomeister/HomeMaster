@@ -27,6 +27,10 @@ export class Backend {
       collectionStore.recentAppCollections[0].allApps.length;
   }
 
+  public init() {}
+
+  public destroy() {}
+
   public LoadSettings(newSettings: HomeMasterSettings) {
     this.SetCache(null);
 
